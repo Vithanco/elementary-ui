@@ -1,9 +1,11 @@
-extension ForEach: _Mountable, View where Content: _KeyReadableView, Data: Collection {
+extension ForEach: View where Content: _KeyReadableView, Data: Collection {}
+extension ForEach: SVGView where Content: _KeyReadableSVGView, Data: Collection {}
+extension ForEach: _Mountable where Content: _KeyReadableContent, Data: Collection {
     public typealias _MountedNode = _ForEachNode<Data, Content>
 
-    public init<V: View>(
+    public init<V: MarkupContent & _Mountable>(
         _ data: Data,
-        @HTMLBuilder content: @escaping @Sendable (Data.Element) -> V
+        @ContentBuilder content: @escaping @Sendable (Data.Element) -> V
     ) where Content == _KeyedView<V>, Data.Element: Identifiable, Data.Element.ID: LosslessStringConvertible {
         self.init(
             data,
@@ -11,10 +13,10 @@ extension ForEach: _Mountable, View where Content: _KeyReadableView, Data: Colle
         )
     }
 
-    public init<ID: LosslessStringConvertible, V: View>(
+    public init<ID: LosslessStringConvertible, V: MarkupContent & _Mountable>(
         _ data: Data,
         key: @escaping @Sendable (Data.Element) -> ID,
-        @HTMLBuilder content: @escaping @Sendable (Data.Element) -> V
+        @ContentBuilder content: @escaping @Sendable (Data.Element) -> V
     ) where Content == _KeyedView<V> {
         self.init(
             data,

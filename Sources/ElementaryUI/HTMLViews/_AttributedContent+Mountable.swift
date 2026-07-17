@@ -1,4 +1,6 @@
-extension _AttributedElement: _Mountable, View where Content: _Mountable {
+extension _AttributedContent: View where Content: View {}
+extension _AttributedContent: SVGView where Content: SVGView {}
+extension _AttributedContent: _Mountable where Content: _Mountable {
     public typealias _MountedNode = _StatefulNode<_AttributeModifier, Content._MountedNode>
 
     public static func _makeNode(
@@ -6,7 +8,7 @@ extension _AttributedElement: _Mountable, View where Content: _Mountable {
         context: borrowing _ViewContext,
         ctx: inout _MountContext
     ) -> _MountedNode {
-        let attributeModifier = _AttributeModifier(value: view.attributes, upstream: context.modifiers)
+        let attributeModifier = _AttributeModifier(value: view._attributes, upstream: context.modifiers)
 
         var context = copy context
         context.modifiers[_AttributeModifier.key] = attributeModifier
@@ -22,7 +24,7 @@ extension _AttributedElement: _Mountable, View where Content: _Mountable {
         node: inout _MountedNode,
         tx: inout _TransactionContext
     ) {
-        node.state.updateValue(view.attributes, &tx)
+        node.state.updateValue(view._attributes, &tx)
 
         Content._patchNode(
             view.content,

@@ -16,22 +16,32 @@ struct ViewMacroTests {
     @Test
     func viewMacroWithPublicAccess() {
         let view = PublicMacroView(number: 7)
-        let body = view.body as! HTMLText
+        let body = view.body as! StringContent
         #expect(body.text == "Hello 7")
     }
 
     @Test
     func viewMacroWithPackageAccess() {
         let view = PackageMacroView(number: 11)
-        let body = view.body as! HTMLText
+        let body = view.body as! StringContent
         #expect(body.text == "Hello 11")
     }
 
     @Test
     func viewMacroWithInternalAccess() {
         let view = MyInternalView(number: 3)
-        let body = view.body as! HTMLText
+        let body = view.body as! StringContent
         #expect(body.text == "Hello 3")
+    }
+
+    @Test
+    func viewMacroInfersSVGView() {
+        let svgView: Any = InferredSVGMacroView()
+        let htmlView: Any = StatelessView()
+        #expect(svgView is any SVGView == true)
+        #expect(svgView is any View == false)
+        #expect(htmlView is any SVGView == false)
+        #expect(htmlView is any View == true)
     }
 }
 
@@ -75,5 +85,12 @@ package struct PackageMacroView {
 
     package var body: some View {
         "Hello \(number)"
+    }
+}
+
+@View
+private struct InferredSVGMacroView {
+    var body: some SVGView {
+        SVG.rect(.width(10), .height(10))
     }
 }

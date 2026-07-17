@@ -1,4 +1,5 @@
 extension Optional: View where Wrapped: View {}
+extension Optional: SVGView where Wrapped: SVGView {}
 extension Optional: _Mountable where Wrapped: _Mountable {
     public typealias _MountedNode = _ConditionalNode
 
@@ -23,7 +24,7 @@ extension Optional: _Mountable where Wrapped: _Mountable {
                 context: context,
                 ctx: &ctx,
                 makeActive: { c, mountCtx in
-                    EmptyHTML._makeNode(EmptyHTML(), context: c, ctx: &mountCtx)
+                    EmptyContent._makeNode(EmptyContent(), context: c, ctx: &mountCtx)
                 }
             )
         }

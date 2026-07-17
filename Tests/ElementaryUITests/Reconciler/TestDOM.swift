@@ -24,6 +24,7 @@ private extension DOM.Node {
 final class TestDOM: DOM.Interactor {
     enum Op: Equatable, CustomStringConvertible {
         case createElement(String)
+        case createElementNS(namespaceURI: String, element: String)
         case createText(String)
         case setAttr(node: String, name: String, value: String?)
         case removeAttr(node: String, name: String)
@@ -40,6 +41,8 @@ final class TestDOM: DOM.Interactor {
             switch self {
             case let .createElement(tag):
                 "create <\(tag)>"
+            case let .createElementNS(namespaceURI, element):
+                "create <\(element)> in \(namespaceURI)"
             case let .createText(text):
                 "create '\(text)'"
             case let .setAttr(node, name, value):
@@ -197,6 +200,11 @@ final class TestDOM: DOM.Interactor {
 
     func createElement(_ element: String) -> DOM.Node {
         ops.append(.createElement(element))
+        return DOM.Node(NodeRef(kind: .element(ElementData(tag: element))))
+    }
+
+    func createElementNS(namespaceURI: String, element: String) -> DOM.Node {
+        ops.append(.createElementNS(namespaceURI: namespaceURI, element: element))
         return DOM.Node(NodeRef(kind: .element(ElementData(tag: element))))
     }
 
@@ -375,14 +383,14 @@ extension TestDOM.NodeRef.Kind: Equatable {
     }
 }
 
-func mountOps(@HTMLBuilder _ view: @escaping () -> some View) -> [TestDOM.Op] {
+func mountOps(@ContentBuilder _ view: @escaping () -> some View) -> [TestDOM.Op] {
     let dom = TestDOM()
     dom.mount(view)
     dom.runNextFrame()
     return dom.ops
 }
 
-func patchOps(@HTMLBuilder _ view: @escaping () -> some View, toggle: () -> Void) -> [TestDOM.Op] {
+func patchOps(@ContentBuilder _ view: @escaping () -> some View, toggle: () -> Void) -> [TestDOM.Op] {
     let dom = TestDOM()
     dom.mount(view)
     dom.runNextFrame()
@@ -393,7 +401,7 @@ func patchOps(@HTMLBuilder _ view: @escaping () -> some View, toggle: () -> Void
     return dom.ops
 }
 
-func trackMounting(@HTMLBuilder _ view: @escaping () -> some View) -> [String] {
+func trackMounting(@ContentBuilder _ view: @escaping () -> some View) -> [String] {
     let dom = TestDOM()
     let tracker = RenderTracker()
     dom.mount { view().environment(#Key(\.tracker), tracker) }
@@ -401,7 +409,7 @@ func trackMounting(@HTMLBuilder _ view: @escaping () -> some View) -> [String] {
     return tracker.calls
 }
 
-func trackUpdating(@HTMLBuilder _ view: @escaping () -> some View, toggle: () -> Void) -> [String] {
+func trackUpdating(@ContentBuilder _ view: @escaping () -> some View, toggle: () -> Void) -> [String] {
     let dom = TestDOM()
     let tracker = RenderTracker()
     dom.mount { view().environment(#Key(\.tracker), tracker) }
