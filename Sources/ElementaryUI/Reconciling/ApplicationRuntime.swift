@@ -1,6 +1,6 @@
 import BasicContainers
 
-final class ApplicationRuntime<DOMInteractor: DOM.Interactor> {
+final class ApplicationRuntime {
     private var rootNode: _ConditionalNode?
     private var scheduler: Scheduler
 
@@ -29,7 +29,7 @@ final class ApplicationRuntime<DOMInteractor: DOM.Interactor> {
                         }
                     )
 
-                    _ = mountCtx.mountInDOMNode(domRoot, isRoot: true)
+                    _ = mountCtx.mountInDOMNode(domRoot)
                     return node
                 }
             }

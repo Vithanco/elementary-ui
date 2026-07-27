@@ -62,7 +62,7 @@ final class MountedStyleModifier<Instance: CSSAnimatedValueInstance>: Unmountabl
         animations.removeAll(keepingCapacity: true)
     }
 
-    private func startOrUpdateAnimations(dom: any DOM.Interactor, scheduler: Scheduler) {
+    private func startOrUpdateAnimations(dom: DOMInteractor, scheduler: Scheduler) {
         if animations.isEmpty {
             logTrace("starting animations")
             animations.reserveCapacity(values.count)

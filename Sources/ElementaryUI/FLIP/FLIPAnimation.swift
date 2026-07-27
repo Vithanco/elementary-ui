@@ -3,12 +3,18 @@ final class FLIPAnimation<Value: CSSAnimatable> {
     private var animatedValue: AnimatedValue<Value>
     private var domAnimation: DOM.Animation?
     private var isDirty: Bool
+    private var scheduler: FLIPScheduler
 
     var isCompleted: Bool {
         !animatedValue.isAnimating
     }
 
+    var hasPendingCommit: Bool {
+        isDirty
+    }
+
     init(
+        scheduler: FLIPScheduler,
         node: DOM.Node,
         first: Value,
         last: Value,
@@ -16,6 +22,7 @@ final class FLIPAnimation<Value: CSSAnimatable> {
         frameTime: Double,
         initialVelocity: AnimatableVector? = nil
     ) {
+        self.scheduler = scheduler
         self.node = node
         self.animatedValue = AnimatedValue(value: first)
 
@@ -90,6 +97,7 @@ final class FLIPAnimation<Value: CSSAnimatable> {
                             logTrace("CSS animation of \(Value.CSSValue.styleKey) completed, marking dirty")
                             self.animatedValue.progressToTime(context.currentFrameTime)
                             self.isDirty = true
+                            self.scheduler.scheduleLayoutEffect(on: context.scheduler)
                         }
                     }
                 }
