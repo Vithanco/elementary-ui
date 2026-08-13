@@ -1,13 +1,10 @@
-// The `View` event modifiers, mirrored for SVG content.
-//
-// Declarations only — every one of these forwards to the same `DOMEffectView` and
-// the same modifier stack that `View` uses. The duplication is forced by the
-// return type: `some View<Tag>` and `some SVGView<Tag>` are different opaque
-// types, so one shared extension on `MarkupContent & _Mountable` cannot serve
-// both without making `DOMEffectView` public API.
+// The `View` event modifiers, mirrored for SVG content. The duplication is forced
+// by the return type: `some View<Tag>` and `some SVGView<Tag>` are different opaque
+// types, so one shared extension cannot serve both without making `DOMEffectView`
+// public API.
 
 public extension SVGView {
-    // TODO: embedded - see the matching note on `View`; kept in step deliberately.
+    // TODO: embedded - must be public, see the matching note on `View`.
     consuming func _onEvent<Config: _DOMEventHandlerConfig>(
         _ type: Config.Type,
         handler: @escaping (Config.Event) -> Void

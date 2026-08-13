@@ -80,11 +80,8 @@ public extension View where Tag == HTMLTag.input {
     }
 }
 
-// Constrained to what the implementation below actually uses — `Wrapped.Tag` and
-// the three `_Mountable` requirements — rather than to `View`. Nothing here reads
-// anything HTML-specific, and the modifier stack it drives attaches to DOM nodes,
-// which are namespace-agnostic. The two conditional conformances then let the same
-// wrapper carry a modifier over HTML and over SVG content alike.
+// `Wrapped` is deliberately not constrained to `View`: the modifier stack this
+// drives attaches to DOM nodes, which are namespace-agnostic.
 struct DOMEffectView<Effect: DOMElementModifier, Wrapped: MarkupContent & _Mountable> {
     typealias Body = Never
     typealias Tag = Wrapped.Tag
@@ -116,10 +113,8 @@ struct DOMEffectView<Effect: DOMElementModifier, Wrapped: MarkupContent & _Mount
     }
 }
 
-// `MarkupContent` is stated once and unconditionally, because a type may conform
-// to a protocol only once and both `HTML` and `SVGContent` inherit it. It costs
-// nothing: `Tag` is the wrapped tag, `Body` is `Never`, and the `_render` default
-// on `MarkupContent` supplies `_Renderable`.
+// `MarkupContent` must be unconditional: a type may conform to a protocol only
+// once, and both `HTML` and `SVGContent` inherit it.
 extension DOMEffectView: _Mountable {}
 extension DOMEffectView: MarkupContent {}
 extension DOMEffectView: HTML, View where Wrapped: View {}

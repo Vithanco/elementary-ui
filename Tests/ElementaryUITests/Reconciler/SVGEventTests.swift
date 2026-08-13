@@ -2,10 +2,7 @@ import ElementaryUI
 import Reactivity
 import Testing
 
-/// The SVG counterparts of the event tests in `DOMMountingTests`. Before the
-/// modifier surface was generalised these could not be written at all: the
-/// modifiers lived on `View`, only `SVG.svg` conforms to `View`, and everything
-/// nested inside it is `SVGView`.
+/// The SVG counterparts of the event tests in `DOMMountingTests`.
 struct SVGEventTests {
     let svgNamespaceURI = "http://www.w3.org/2000/svg"
 
@@ -41,8 +38,6 @@ struct SVGEventTests {
         #expect(dom.eventSinkKinds == [.action])
     }
 
-    /// The modifier must not disturb what it wraps: same element, same namespace,
-    /// same attributes, with a listener added.
     @Test
     func theModifierLeavesTheWrappedElementUntouched() {
         let dom = TestDOM()
@@ -87,8 +82,6 @@ struct SVGEventTests {
         #expect(dom.ops.contains(.addListener(node: "<rect>", event: "action-a")))
     }
 
-    /// The point of the whole exercise for a graph editor: a recursive `SVGView`
-    /// over a tree of unknown shape, with a handler on each element it draws.
     @Test
     func aRecursiveSVGViewCanCarryAHandlerPerElement() {
         let dom = TestDOM()
