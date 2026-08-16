@@ -39,6 +39,26 @@ struct SVGEventTests {
     }
 
     @Test
+    func setsTheRemainingMouseAndKeyboardListeners() {
+        let dom = TestDOM()
+        dom.mount {
+            SVG.svg {
+                SVG.rect(.x(0), .y(0), .width(1), .height(1))
+                    .onMouseDown { _ in }
+                    .onMouseMove { _ in }
+                    .onMouseUp { _ in }
+                    .onKeyDown { _ in }
+            }
+        }
+        dom.runNextFrame()
+
+        #expect(dom.ops.contains(.addListener(node: "<rect>", event: "mousedown")))
+        #expect(dom.ops.contains(.addListener(node: "<rect>", event: "mousemove")))
+        #expect(dom.ops.contains(.addListener(node: "<rect>", event: "mouseup")))
+        #expect(dom.ops.contains(.addListener(node: "<rect>", event: "keydown")))
+    }
+
+    @Test
     func theModifierLeavesTheWrappedElementUntouched() {
         let dom = TestDOM()
         dom.mount {
