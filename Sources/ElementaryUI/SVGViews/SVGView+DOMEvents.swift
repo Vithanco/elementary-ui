@@ -1,7 +1,5 @@
-// The `View` event modifiers, mirrored for SVG content, following `key(_:)` in
-// `KeyedView.swift`: the wrapper conforms conditionally, the modifier is declared
-// once per namespace. `some View<Tag>` and `some SVGView<Tag>` are different opaque
-// types, so a single extension cannot serve both.
+// Mirrored per namespace like `key(_:)` in `KeyedView.swift`: `some View<Tag>` and
+// `some SVGView<Tag>` are different opaque types, so one extension cannot serve both.
 //
 // `onInput` is deliberately absent - input events do not fire on SVG elements.
 

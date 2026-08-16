@@ -1,7 +1,5 @@
-// The `View` style modifiers, mirrored for SVG content. See the note in
-// `SVGView+DOMEvents.swift` on why each namespace declares its own.
+// See `SVGView+DOMEvents.swift` for why each namespace declares its own.
 //
-// These drive CSS properties, which apply to SVG elements as they do to HTML ones.
 // The deprecated `Float` overload of `offset` is not mirrored.
 
 extension SVGView {
