@@ -1,10 +1,10 @@
-// Mirrored per namespace like `key(_:)` in `KeyedView.swift`: `some View<Tag>` and
-// `some SVGView<Tag>` are different opaque types, so one extension cannot serve both.
+// Mirrored per namespace like key(_:) in KeyedView.swift: some View<Tag> and
+// some SVGView<Tag> are different opaque types, so one extension cannot serve both.
 //
-// `onInput` is deliberately absent - input events do not fire on SVG elements.
+// onInput is deliberately absent - input events do not fire on SVG elements.
 
 public extension SVGView {
-    // TODO: embedded - must be public, see the matching note on `View`.
+    // TODO: embedded - must be public, see the matching note on View.
     consuming func _onEvent<Config: _DOMEventHandlerConfig>(
         _ type: Config.Type,
         handler: @escaping (Config.Event) -> Void

@@ -1,6 +1,6 @@
-// See `SVGView+DOMEvents.swift` for why each namespace declares its own.
+// See SVGView+DOMEvents.swift for why each namespace declares its own.
 //
-// The deprecated `Float` overload of `offset` is not mirrored.
+// The deprecated Float overload of offset is not mirrored.
 
 extension SVGView {
     /// Sets the opacity of the content.

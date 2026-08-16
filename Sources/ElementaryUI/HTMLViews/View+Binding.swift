@@ -80,7 +80,8 @@ public extension View where Tag == HTMLTag.input {
     }
 }
 
-// Not `Wrapped: View` - the modifiers this drives attach to namespace-agnostic DOM nodes.
+// Wrapped is not constrained to View - the modifiers this drives attach to
+// namespace-agnostic DOM nodes.
 struct DOMEffectView<Effect: DOMElementModifier, Wrapped: MarkupContent & _Mountable> {
     typealias Body = Never
     typealias Tag = Wrapped.Tag
@@ -112,7 +113,7 @@ struct DOMEffectView<Effect: DOMElementModifier, Wrapped: MarkupContent & _Mount
     }
 }
 
-// `MarkupContent` cannot be conditional here - `HTML` and `SVGContent` both inherit it,
+// MarkupContent cannot be conditional here - HTML and SVGContent both inherit it,
 // and a type may conform to a protocol only once.
 extension DOMEffectView: _Mountable {}
 extension DOMEffectView: MarkupContent {}
