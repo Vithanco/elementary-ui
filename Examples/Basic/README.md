@@ -3,7 +3,7 @@
 See https://elementary.codes for guide.
 
 ```sh
-pnpm preinstall && pnpm install
+pnpm install
 
 # dev build + watch
 pnpm dev

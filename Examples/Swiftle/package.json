@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "preinstall": "swift package resolve",
     "dev": "vite --open",
     "build": "vite build",
     "preview": "vite preview"
