@@ -1,4 +1,4 @@
-final class FilterModifier: DOMElementModifier {
+public final class FilterModifier: DOMElementModifier {
     public typealias Value = CSSFilter.AnyFunction
 
     let upstream: FilterModifier?

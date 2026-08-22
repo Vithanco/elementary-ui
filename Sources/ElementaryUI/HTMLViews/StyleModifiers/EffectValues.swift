@@ -51,10 +51,10 @@ public struct UnitPoint: Equatable, Sendable {
     }
 }
 
-struct CSSTransform: CSSPropertyValue {
+public struct CSSTransform: CSSPropertyValue {
     static var styleKey: String = "transform"
 
-    enum AnyFunction {
+    public enum AnyFunction {
         case rotation(Rotation)
         case translation(Translation)
         case scale(Scale)
@@ -110,7 +110,7 @@ extension CSSTransform.AnyFunction {
 }
 
 extension CSSTransform {
-    struct Rotation: CSSAnimatable {
+    public struct Rotation: CSSAnimatable {
         var angle: Angle
         var anchor: UnitPoint
 
@@ -129,20 +129,20 @@ extension CSSTransform {
             return CSSTransform(.rotation(self))
         }
 
-        init(_animatableVector animatableVector: AnimatableVector) {
+        public init(_animatableVector animatableVector: AnimatableVector) {
             let simd = SIMD4<Float>(_animatableVector: animatableVector)
             self.angle = Angle(degrees: Double(simd[0]))
             self.anchor = UnitPoint(x: simd[1], y: simd[2])
         }
 
-        var animatableVector: AnimatableVector {
+        public var animatableVector: AnimatableVector {
             SIMD4<Float>(Float(angle.degrees), Float(anchor.x), Float(anchor.y), 0).animatableVector
         }
     }
 }
 
 extension CSSTransform {
-    struct Translation: CSSAnimatable {
+    public struct Translation: CSSAnimatable {
         var x: Double
         var y: Double
 
@@ -155,20 +155,20 @@ extension CSSTransform {
             CSSTransform(.translation(self))
         }
 
-        init(_animatableVector animatableVector: AnimatableVector) {
+        public init(_animatableVector animatableVector: AnimatableVector) {
             let simd = SIMD2<Double>(_animatableVector: animatableVector)
             self.x = simd[0]
             self.y = simd[1]
         }
 
-        var animatableVector: AnimatableVector {
+        public var animatableVector: AnimatableVector {
             SIMD2<Double>(x, y).animatableVector
         }
     }
 }
 
 extension CSSTransform {
-    struct Scale: CSSAnimatable {
+    public struct Scale: CSSAnimatable {
         var x: Double
         var y: Double
         var anchor: UnitPoint
@@ -188,20 +188,20 @@ extension CSSTransform {
             return CSSTransform(.scale(self))
         }
 
-        init(_animatableVector animatableVector: AnimatableVector) {
+        public init(_animatableVector animatableVector: AnimatableVector) {
             let simd = SIMD4<Double>(_animatableVector: animatableVector)
             self.x = simd[0]
             self.y = simd[1]
             self.anchor = UnitPoint(x: Float(simd[2]), y: Float(simd[3]))
         }
 
-        var animatableVector: AnimatableVector {
+        public var animatableVector: AnimatableVector {
             SIMD4<Double>(x, y, Double(anchor.x), Double(anchor.y)).animatableVector
         }
     }
 }
 
-struct CSSOpacity {
+public struct CSSOpacity {
     var value: Double
 
     init(value: Double) {
@@ -211,11 +211,11 @@ struct CSSOpacity {
 
 extension CSSOpacity: CSSAnimatable {
     var cssValue: CSSOpacity { self }
-    init(_animatableVector animatableVector: AnimatableVector) {
+    public init(_animatableVector animatableVector: AnimatableVector) {
         self.value = Double(_animatableVector: animatableVector)
     }
 
-    var animatableVector: AnimatableVector {
+    public var animatableVector: AnimatableVector {
         value.animatableVector
     }
 }
@@ -322,10 +322,10 @@ extension CSSHeight: CSSPropertyValue {
     }
 }
 
-struct CSSFilter: CSSPropertyValue {
+public struct CSSFilter: CSSPropertyValue {
     static var styleKey: String = "filter"
 
-    enum AnyFunction {
+    public enum AnyFunction {
         case blur(Blur)
         case saturation(Saturation)
         case brightness(Brightness)
@@ -369,7 +369,7 @@ extension CSSFilter.AnyFunction {
 }
 
 extension CSSFilter {
-    struct Blur: CSSAnimatable {
+    public struct Blur: CSSAnimatable {
         var radius: Double
 
         init(radius: Double) {
@@ -385,18 +385,18 @@ extension CSSFilter {
             return CSSFilter(.blur(self))
         }
 
-        init(_animatableVector animatableVector: AnimatableVector) {
+        public init(_animatableVector animatableVector: AnimatableVector) {
             self.radius = Double(_animatableVector: animatableVector)
         }
 
-        var animatableVector: AnimatableVector {
+        public var animatableVector: AnimatableVector {
             radius.animatableVector
         }
     }
 }
 
 extension CSSFilter {
-    struct Saturation: CSSAnimatable {
+    public struct Saturation: CSSAnimatable {
         var amount: Double
 
         init(amount: Double) {
@@ -412,18 +412,18 @@ extension CSSFilter {
             return CSSFilter(.saturation(self))
         }
 
-        init(_animatableVector animatableVector: AnimatableVector) {
+        public init(_animatableVector animatableVector: AnimatableVector) {
             self.amount = Double(_animatableVector: animatableVector)
         }
 
-        var animatableVector: AnimatableVector {
+        public var animatableVector: AnimatableVector {
             amount.animatableVector
         }
     }
 }
 
 extension CSSFilter {
-    struct Brightness: CSSAnimatable {
+    public struct Brightness: CSSAnimatable {
         var amount: Double
 
         init(amount: Double) {
@@ -439,11 +439,11 @@ extension CSSFilter {
             return CSSFilter(.brightness(self))
         }
 
-        init(_animatableVector animatableVector: AnimatableVector) {
+        public init(_animatableVector animatableVector: AnimatableVector) {
             self.amount = Double(_animatableVector: animatableVector)
         }
 
-        var animatableVector: AnimatableVector {
+        public var animatableVector: AnimatableVector {
             amount.animatableVector
         }
     }

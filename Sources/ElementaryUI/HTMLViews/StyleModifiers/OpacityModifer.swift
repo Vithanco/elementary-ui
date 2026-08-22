@@ -1,4 +1,4 @@
-final class OpacityModifier: DOMElementModifier {
+public final class OpacityModifier: DOMElementModifier {
     public typealias Value = CSSOpacity
 
     let upstream: OpacityModifier?

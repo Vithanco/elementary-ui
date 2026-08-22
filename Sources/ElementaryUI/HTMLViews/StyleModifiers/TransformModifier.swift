@@ -1,4 +1,4 @@
-final class TransformModifier: DOMElementModifier {
+public final class TransformModifier: DOMElementModifier {
     public typealias Value = CSSTransform.AnyFunction
 
     let upstream: TransformModifier?
