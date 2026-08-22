@@ -1,7 +1,7 @@
 import _UTF8Internals
 
 public final class _AttributeModifier: DOMElementModifier, Invalidateable {
-    typealias Value = _AttributeStorage
+    public typealias Value = _AttributeStorage
 
     let upstream: _AttributeModifier?
     var tracker: DependencyTracker = .init()
@@ -14,20 +14,20 @@ public final class _AttributeModifier: DOMElementModifier, Invalidateable {
         return combined
     }
 
-    init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
+    public init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
         self.lastValue = value
         self.upstream = upstream[_AttributeModifier.key]
         self.upstream?.tracker.addDependency(self)
     }
 
-    func updateValue(_ value: consuming Value, _ context: inout _TransactionContext) {
+    public func updateValue(_ value: consuming Value, _ context: inout _TransactionContext) {
         if value != lastValue {
             lastValue = value
             tracker.invalidateAll(&context)
         }
     }
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+    @_spi(Benchmarking) public func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
         logTrace("mounting attribute modifier")
         return AnyUnmountable(MountedInstance(node, self, &context))
     }

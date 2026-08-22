@@ -1,18 +1,18 @@
 final class FilterModifier: DOMElementModifier {
-    typealias Value = CSSFilter.AnyFunction
+    public typealias Value = CSSFilter.AnyFunction
 
     let upstream: FilterModifier?
     let layerNumber: Int
 
     var value: CSSFilter.AnyFunction.ValueSource
 
-    init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
+    public init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
         self.value = value.makeSource()
         self.upstream = upstream[FilterModifier.key]
         self.layerNumber = (self.upstream?.layerNumber ?? 0) + 1
     }
 
-    func updateValue(_ value: consuming Value, _ context: inout _TransactionContext) {
+    public func updateValue(_ value: consuming Value, _ context: inout _TransactionContext) {
         switch (self.value, value) {
         case (.blur(let blur), .blur(let newBlur)):
             blur.updateValue(newBlur, &context)
@@ -25,7 +25,7 @@ final class FilterModifier: DOMElementModifier {
         }
     }
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+    @_spi(Benchmarking) public func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
         AnyUnmountable(MountedStyleModifier(node, makeLayers(&context), &context))
     }
 

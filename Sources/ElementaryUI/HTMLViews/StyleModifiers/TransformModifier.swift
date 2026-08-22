@@ -1,18 +1,18 @@
 final class TransformModifier: DOMElementModifier {
-    typealias Value = CSSTransform.AnyFunction
+    public typealias Value = CSSTransform.AnyFunction
 
     let upstream: TransformModifier?
     let layerNumber: Int
 
     var value: CSSTransform.AnyFunction.ValueSource
 
-    init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
+    public init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
         self.value = value.makeSource()
         self.upstream = upstream[TransformModifier.key]
         self.layerNumber = (self.upstream?.layerNumber ?? 0) + 1
     }
 
-    func updateValue(_ value: consuming Value, _ context: inout _TransactionContext) {
+    public func updateValue(_ value: consuming Value, _ context: inout _TransactionContext) {
         switch (self.value, value) {
         case (.rotation(let rotation), .rotation(let newRotation)):
             rotation.updateValue(newRotation, &context)
@@ -25,7 +25,7 @@ final class TransformModifier: DOMElementModifier {
         }
     }
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+    @_spi(Benchmarking) public func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
         AnyUnmountable(MountedStyleModifier(node, makeLayers(&context), &context))
     }
 

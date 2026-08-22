@@ -49,11 +49,11 @@ final class CSSValueSource<Value: CSSAnimatable & Equatable> {
     var dependencies: DependencyTracker = .init()
     var value: Value
 
-    init(value: consuming Value) {
+    public init(value: consuming Value) {
         self.value = value
     }
 
-    func updateValue(_ value: consuming Value, _ context: inout _TransactionContext) {
+    public func updateValue(_ value: consuming Value, _ context: inout _TransactionContext) {
         guard value != self.value else { return }
         self.value = value
         dependencies.invalidateAll(&context)

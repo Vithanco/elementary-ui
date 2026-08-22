@@ -2,11 +2,11 @@ final class FocusModifier<FocusValue: Hashable>: DOMElementModifier, Unmountable
     private var binding: Binding
     private var focusAccessor: DOM.FocusAccessor?
 
-    init(value: consuming Binding, upstream: borrowing DOMElementModifiers) {
+    public init(value: consuming Binding, upstream: borrowing DOMElementModifiers) {
         self.binding = value
     }
 
-    func updateValue(_ value: consuming Binding, _ context: inout _TransactionContext) {
+    public func updateValue(_ value: consuming Binding, _ context: inout _TransactionContext) {
         guard value.storage === self.binding.storage else {
             logWarning("Updating FocusState.Binding is not supported")
             return
@@ -15,7 +15,7 @@ final class FocusModifier<FocusValue: Hashable>: DOMElementModifier, Unmountable
         self.binding = value
     }
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+    @_spi(Benchmarking) public func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
         if focusAccessor != nil {
             assertionFailure("FocusModifier can only be mounted on a single element")
             logWarning("FocusModifier can only be mounted on a single element")

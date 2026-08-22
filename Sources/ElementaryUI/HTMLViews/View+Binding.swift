@@ -82,15 +82,15 @@ public extension View where Tag == HTMLTag.input {
 
 // Wrapped is not constrained to View - the modifiers this drives attach to
 // namespace-agnostic DOM nodes.
-struct DOMEffectView<Effect: DOMElementModifier, Wrapped: MarkupContent & _Mountable> {
-    typealias Body = Never
-    typealias Tag = Wrapped.Tag
+public struct DOMEffectView<Effect: DOMElementModifier, Wrapped: MarkupContent & _Mountable> {
+    public typealias Body = Never
+    public typealias Tag = Wrapped.Tag
     var value: Effect.Value
     var wrapped: Wrapped
 
-    typealias _MountedNode = _StatefulNode<Effect, Wrapped._MountedNode>
+    public typealias _MountedNode = _StatefulNode<Effect, Wrapped._MountedNode>
 
-    static func _makeNode(
+    public static func _makeNode(
         _ view: consuming Self,
         context: borrowing _ViewContext,
         ctx: inout _MountContext
@@ -103,7 +103,7 @@ struct DOMEffectView<Effect: DOMElementModifier, Wrapped: MarkupContent & _Mount
         return .init(state: effect, child: Wrapped._makeNode(view.wrapped, context: context, ctx: &ctx))
     }
 
-    static func _patchNode(
+    public static func _patchNode(
         _ view: consuming Self,
         node: inout _MountedNode,
         tx: inout _TransactionContext

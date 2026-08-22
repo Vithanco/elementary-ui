@@ -1,4 +1,4 @@
-protocol DOMElementModifier: AnyObject {
+public protocol DOMElementModifier: AnyObject {
     associatedtype Value
 
     static var key: DOMElementModifiers.Key<Self> { get }
@@ -6,7 +6,7 @@ protocol DOMElementModifier: AnyObject {
     init(value: consuming Value, upstream: borrowing DOMElementModifiers)
     func updateValue(_ value: consuming Value, _ context: inout _TransactionContext)
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable
+    @_spi(Benchmarking) func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable
 }
 
 protocol Unmountable: AnyObject {
@@ -14,13 +14,13 @@ protocol Unmountable: AnyObject {
 }
 
 extension DOMElementModifier {
-    static var key: DOMElementModifiers.Key<Self> {
+    public static var key: DOMElementModifiers.Key<Self> {
         DOMElementModifiers.Key(Self.self)
     }
 }
 
-struct DOMElementModifiers {
-    struct Key<Directive: DOMElementModifier> {
+public struct DOMElementModifiers {
+    public struct Key<Directive: DOMElementModifier> {
         let typeID: ObjectIdentifier
 
         init(_: Directive.Type) {
@@ -65,7 +65,7 @@ struct DOMElementModifiers {
     }
 }
 
-struct AnyUnmountable {
+public struct AnyUnmountable {
     private let _unmount: (inout _CommitContext) -> Void
 
     init(_ unmountable: some Unmountable) {
