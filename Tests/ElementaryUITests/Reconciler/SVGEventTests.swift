@@ -14,7 +14,7 @@ struct SVGEventTests {
     // namespaces - which the separate HTML and SVG suites only show one at a time.
     private func withClickHandler<Content: MarkupContent & _Mountable>(
         _ content: consuming Content
-    ) -> DOMEffectView<some DOMElementModifier, Content> {
+    ) -> _DOMEffectView<some _DOMElementModifier, Content> {
         content.onClick { _ in }
     }
 

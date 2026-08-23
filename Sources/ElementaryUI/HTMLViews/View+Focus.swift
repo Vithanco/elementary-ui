@@ -42,7 +42,7 @@ public extension View {
     /// - Parameter binding: A boolean focus binding, typically from `@FocusState`.
     /// - Returns: A view that reads and updates focus through the binding.
     consuming func focused(_ binding: FocusState<Bool>.Binding) -> some View<Tag> {
-        DOMEffectView<FocusModifier<Bool>, Self>(value: .init(storage: binding.storage), wrapped: self)
+        _DOMEffectView<FocusModifier<Bool>, Self>(value: .init(storage: binding.storage), wrapped: self)
     }
 
     /// Binds this view's focus to a keyed ``FocusState`` binding.
@@ -100,7 +100,7 @@ public extension View {
         _ binding: FocusState<Key?>.Binding,
         equals value: Key
     ) -> some View<Tag> {
-        DOMEffectView<FocusModifier<Key?>, Self>(
+        _DOMEffectView<FocusModifier<Key?>, Self>(
             value: .init(storage: binding.storage, value: value),
             wrapped: self
         )

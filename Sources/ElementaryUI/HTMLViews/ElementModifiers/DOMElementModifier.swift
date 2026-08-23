@@ -1,26 +1,26 @@
-public protocol DOMElementModifier: AnyObject {
+public protocol _DOMElementModifier: AnyObject {
     associatedtype Value
 
-    static var key: DOMElementModifiers.Key<Self> { get }
+    static var key: _DOMElementModifiers.Key<Self> { get }
 
-    init(value: consuming Value, upstream: borrowing DOMElementModifiers)
+    init(value: consuming Value, upstream: borrowing _DOMElementModifiers)
     func updateValue(_ value: consuming Value, _ context: inout _TransactionContext)
 
-    @_spi(Benchmarking) func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable
+    @_spi(Benchmarking) func mount(_ node: DOM.Node, _ context: inout _MountContext) -> _AnyUnmountable
 }
 
 protocol Unmountable: AnyObject {
     func unmount(_ context: inout _CommitContext)
 }
 
-extension DOMElementModifier {
-    public static var key: DOMElementModifiers.Key<Self> {
-        DOMElementModifiers.Key(Self.self)
+extension _DOMElementModifier {
+    public static var key: _DOMElementModifiers.Key<Self> {
+        _DOMElementModifiers.Key(Self.self)
     }
 }
 
-public struct DOMElementModifiers {
-    public struct Key<Directive: DOMElementModifier> {
+public struct _DOMElementModifiers {
+    public struct Key<Directive: _DOMElementModifier> {
         let typeID: ObjectIdentifier
 
         init(_: Directive.Type) {
@@ -31,13 +31,13 @@ public struct DOMElementModifiers {
     // Using arrays for stable ordering.
     // Modifier counts are typically small (0-5), so linear search probably outperforms hashing anyway.
     private var keys: [ObjectIdentifier] = []
-    private var values: [any DOMElementModifier] = []
+    private var values: [any _DOMElementModifier] = []
 
     var isEmpty: Bool {
         keys.isEmpty
     }
 
-    subscript<Directive: DOMElementModifier>(_ key: Key<Directive>) -> Directive? {
+    subscript<Directive: _DOMElementModifier>(_ key: Key<Directive>) -> Directive? {
         get {
             guard let i = keys.firstIndex(of: key.typeID) else { return nil }
             return values[i] as? Directive
@@ -57,7 +57,7 @@ public struct DOMElementModifiers {
         }
     }
 
-    mutating func take() -> [any DOMElementModifier] {
+    mutating func take() -> [any _DOMElementModifier] {
         let result = values
         keys.removeAll(keepingCapacity: true)
         values.removeAll(keepingCapacity: true)
@@ -65,7 +65,7 @@ public struct DOMElementModifiers {
     }
 }
 
-public struct AnyUnmountable {
+public struct _AnyUnmountable {
     private let _unmount: (inout _CommitContext) -> Void
 
     init(_ unmountable: some Unmountable) {

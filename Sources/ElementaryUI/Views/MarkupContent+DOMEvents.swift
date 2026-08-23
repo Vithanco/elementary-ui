@@ -7,16 +7,16 @@ public extension MarkupContent where Self: _Mountable {
     consuming func _onEvent<Config: _DOMEventHandlerConfig>(
         _: Config.Type,
         handler: @escaping (Config.Event) -> Void
-    ) -> DOMEffectView<some DOMElementModifier, Self> {
-        DOMEffectView<EventHandlerModifier<Config>, Self>(value: handler, wrapped: self)
+    ) -> _DOMEffectView<some _DOMElementModifier, Self> {
+        _DOMEffectView<EventHandlerModifier<Config>, Self>(value: handler, wrapped: self)
     }
 
     // TODO: embedded - for whatever reason this must be public or the embedded compiler freaks out. investigate why, check if still an issue in 6.3
     consuming func _onEvent<Config: _DOMEventConfig>(
         _: Config.Type,
         handler: @escaping () -> Void
-    ) -> DOMEffectView<some DOMElementModifier, Self> {
-        DOMEffectView<EventActionModifier<Config>, Self>(value: handler, wrapped: self)
+    ) -> _DOMEffectView<some _DOMElementModifier, Self> {
+        _DOMEffectView<EventActionModifier<Config>, Self>(value: handler, wrapped: self)
     }
 
     /// Adds a handler for click events with event details.
@@ -37,7 +37,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to click events.
     consuming func onClick(
         _ handler: @escaping (MouseEvent) -> Void
-    ) -> DOMEffectView<some DOMElementModifier, Self> {
+    ) -> _DOMEffectView<some _DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.Click.self, handler: handler)
     }
 
@@ -58,7 +58,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to click events.
     consuming func onClick(
         _ handler: @escaping () -> Void
-    ) -> DOMEffectView<some DOMElementModifier, Self> {
+    ) -> _DOMEffectView<some _DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.Click.self, handler: handler)
     }
 
@@ -78,7 +78,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to mouse down events.
     consuming func onMouseDown(
         _ handler: @escaping (MouseEvent) -> Void
-    ) -> DOMEffectView<some DOMElementModifier, Self> {
+    ) -> _DOMEffectView<some _DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.MouseDown.self, handler: handler)
     }
 
@@ -97,7 +97,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to mouse move events.
     consuming func onMouseMove(
         _ handler: @escaping (MouseEvent) -> Void
-    ) -> DOMEffectView<some DOMElementModifier, Self> {
+    ) -> _DOMEffectView<some _DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.MouseMove.self, handler: handler)
     }
 
@@ -117,7 +117,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to mouse up events.
     consuming func onMouseUp(
         _ handler: @escaping (MouseEvent) -> Void
-    ) -> DOMEffectView<some DOMElementModifier, Self> {
+    ) -> _DOMEffectView<some _DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.MouseUp.self, handler: handler)
     }
 
@@ -140,7 +140,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to key down events.
     consuming func onKeyDown(
         _ handler: @escaping (KeyboardEvent) -> Void
-    ) -> DOMEffectView<some DOMElementModifier, Self> {
+    ) -> _DOMEffectView<some _DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.KeyDown.self, handler: handler)
     }
 }

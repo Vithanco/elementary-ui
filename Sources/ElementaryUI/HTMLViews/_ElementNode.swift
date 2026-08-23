@@ -9,7 +9,7 @@ public struct _ElementNode<Child: _Reconcilable & ~Copyable>:
 {
     private var child: Child
     private var attributes: _ElementAttributes
-    private var mountedModifiers: [AnyUnmountable] = []
+    private var mountedModifiers: [_AnyUnmountable] = []
 
     init(
         tag: String,

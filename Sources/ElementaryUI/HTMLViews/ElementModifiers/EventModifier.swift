@@ -6,14 +6,14 @@ public protocol _DOMEventHandlerConfig: _DOMEventConfig {
     associatedtype Event: _TypedDOMEvent
 }
 
-final class EventHandlerModifier<Config: _DOMEventHandlerConfig>: DOMElementModifier {
+final class EventHandlerModifier<Config: _DOMEventHandlerConfig>: _DOMElementModifier {
     typealias Value = (Config.Event) -> Void
 
     let upstream: EventHandlerModifier?
 
     private var value: Value
 
-    init(value: consuming @escaping Value, upstream: borrowing DOMElementModifiers) {
+    init(value: consuming @escaping Value, upstream: borrowing _DOMElementModifiers) {
         self.value = value
         self.upstream = upstream[EventHandlerModifier.key]
     }
@@ -22,9 +22,9 @@ final class EventHandlerModifier<Config: _DOMEventHandlerConfig>: DOMElementModi
         self.value = value
     }
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> _AnyUnmountable {
         logTrace("mounting event modifier")
-        return AnyUnmountable(MountedInstance(node, self, &context))
+        return _AnyUnmountable(MountedInstance(node, self, &context))
     }
 
     func handleEvent(_ event: DOM.Event) {
@@ -59,13 +59,13 @@ extension EventHandlerModifier {
 
 // Keep no-argument handlers separate from EventHandlerModifier so they do not
 // materialize DOM.Event or pull typed-event conversion code into the Wasm binary.
-final class EventActionModifier<Config: _DOMEventConfig>: DOMElementModifier {
+final class EventActionModifier<Config: _DOMEventConfig>: _DOMElementModifier {
     typealias Value = () -> Void
 
     let upstream: EventActionModifier?
     private var value: Value
 
-    init(value: consuming @escaping Value, upstream: borrowing DOMElementModifiers) {
+    init(value: consuming @escaping Value, upstream: borrowing _DOMElementModifiers) {
         self.value = value
         self.upstream = upstream[EventActionModifier.key]
     }
@@ -74,9 +74,9 @@ final class EventActionModifier<Config: _DOMEventConfig>: DOMElementModifier {
         self.value = value
     }
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> _AnyUnmountable {
         logTrace("mounting event action modifier")
-        return AnyUnmountable(MountedInstance(node, self, &context))
+        return _AnyUnmountable(MountedInstance(node, self, &context))
     }
 
     func handleEvent() {

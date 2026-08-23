@@ -3,12 +3,12 @@ public struct _ViewContext {
     var environment: EnvironmentValues = .init()
 
     // built-in typed environment values (maybe using plain-old keys might be better?)
-    var modifiers: DOMElementModifiers = .init()
+    var modifiers: _DOMElementModifiers = .init()
     var layoutObservers: DOMLayoutObservers = .init()
     var transition: _TransitionState?
     var functionDepth: Int = 0
 
-    mutating func takeModifiers() -> [any DOMElementModifier] {
+    mutating func takeModifiers() -> [any _DOMElementModifier] {
         modifiers.take()
     }
 
