@@ -1,4 +1,3 @@
-// Concrete return type, not some View<Tag>: the conditional conformances pick the namespace.
 extension MarkupContent where Self: _Mountable {
     /// Sets the opacity of the content.
     ///
@@ -23,7 +22,7 @@ extension MarkupContent where Self: _Mountable {
     /// - Returns: Content with the specified opacity.
     ///
     /// - Note: Changes to opacity are automatically animated when done in an animated transaction.
-    public func opacity(_ value: Double) -> DOMEffectView<OpacityModifier, Self> {
+    public func opacity(_ value: Double) -> DOMEffectView<some DOMElementModifier, Self> {
         DOMEffectView<OpacityModifier, Self>(value: CSSOpacity(value: value), wrapped: self)
     }
 
@@ -53,7 +52,7 @@ extension MarkupContent where Self: _Mountable {
     /// - Returns: Content rotated by the specified angle.
     ///
     /// - Note: Changes to rotation are automatically animated when done in an animated transaction.
-    public func rotationEffect(_ angle: Angle, anchor: UnitPoint = .center) -> DOMEffectView<TransformModifier, Self> {
+    public func rotationEffect(_ angle: Angle, anchor: UnitPoint = .center) -> DOMEffectView<some DOMElementModifier, Self> {
         DOMEffectView<TransformModifier, Self>(value: .rotation(CSSTransform.Rotation(angle: angle, anchor: anchor)), wrapped: self)
     }
 
@@ -82,13 +81,13 @@ extension MarkupContent where Self: _Mountable {
     /// - Returns: Content offset by the specified amounts.
     ///
     /// - Note: Changes to offset are automatically animated when done in an animated transaction.
-    public func offset(x: Double = 0, y: Double = 0) -> DOMEffectView<TransformModifier, Self> {
+    public func offset(x: Double = 0, y: Double = 0) -> DOMEffectView<some DOMElementModifier, Self> {
         DOMEffectView<TransformModifier, Self>(value: .translation(CSSTransform.Translation(x: x, y: y)), wrapped: self)
     }
 
     @available(*, deprecated, message: "Use offset(x: Double, y: Double) instead")
     @_disfavoredOverload
-    public func offset(x: Float = 0, y: Float = 0) -> DOMEffectView<TransformModifier, Self> {
+    public func offset(x: Float = 0, y: Float = 0) -> DOMEffectView<some DOMElementModifier, Self> {
         DOMEffectView<TransformModifier, Self>(value: .translation(CSSTransform.Translation(x: Double(x), y: Double(y))), wrapped: self)
     }
 
@@ -118,7 +117,7 @@ extension MarkupContent where Self: _Mountable {
     /// - Returns: Content scaled by the specified factor.
     ///
     /// - Note: Changes to scale are automatically animated when done in an animated transaction.
-    public func scaleEffect(_ scale: Double, anchor: UnitPoint = .center) -> DOMEffectView<TransformModifier, Self> {
+    public func scaleEffect(_ scale: Double, anchor: UnitPoint = .center) -> DOMEffectView<some DOMElementModifier, Self> {
         DOMEffectView<TransformModifier, Self>(value: .scale(CSSTransform.Scale(x: scale, y: scale, anchor: anchor)), wrapped: self)
     }
 
@@ -150,7 +149,7 @@ extension MarkupContent where Self: _Mountable {
     /// - Returns: Content scaled by the specified factors.
     ///
     /// - Note: Changes to scale are automatically animated when done in an animated transaction.
-    public func scaleEffect(x: Double = 1, y: Double = 1, anchor: UnitPoint = .center) -> DOMEffectView<TransformModifier, Self> {
+    public func scaleEffect(x: Double = 1, y: Double = 1, anchor: UnitPoint = .center) -> DOMEffectView<some DOMElementModifier, Self> {
         DOMEffectView<TransformModifier, Self>(value: .scale(CSSTransform.Scale(x: x, y: y, anchor: anchor)), wrapped: self)
     }
 
@@ -176,7 +175,7 @@ extension MarkupContent where Self: _Mountable {
     /// - Returns: Content with the specified blur effect.
     ///
     /// - Note: Changes to blur are automatically animated when done in an animated transaction.
-    public func blur(radius: Double) -> DOMEffectView<FilterModifier, Self> {
+    public func blur(radius: Double) -> DOMEffectView<some DOMElementModifier, Self> {
         DOMEffectView<FilterModifier, Self>(value: .blur(CSSFilter.Blur(radius: radius)), wrapped: self)
     }
 
@@ -202,7 +201,7 @@ extension MarkupContent where Self: _Mountable {
     /// - Returns: Content with adjusted saturation.
     ///
     /// - Note: Changes to saturation are automatically animated when done in an animated transaction.
-    public func saturation(_ amount: Double) -> DOMEffectView<FilterModifier, Self> {
+    public func saturation(_ amount: Double) -> DOMEffectView<some DOMElementModifier, Self> {
         DOMEffectView<FilterModifier, Self>(value: .saturation(CSSFilter.Saturation(amount: amount)), wrapped: self)
     }
 
@@ -228,7 +227,7 @@ extension MarkupContent where Self: _Mountable {
     /// - Returns: Content with adjusted brightness.
     ///
     /// - Note: Changes to brightness are automatically animated when done in an animated transaction.
-    public func brightness(_ amount: Double) -> DOMEffectView<FilterModifier, Self> {
+    public func brightness(_ amount: Double) -> DOMEffectView<some DOMElementModifier, Self> {
         DOMEffectView<FilterModifier, Self>(value: .brightness(CSSFilter.Brightness(amount: amount)), wrapped: self)
     }
 }

@@ -1,7 +1,7 @@
 import _UTF8Internals
 
 final class BindingModifier<Configuration>: DOMElementModifier, Unmountable where Configuration: BindingConfiguration {
-    public typealias Value = Binding<Configuration.Value>
+    typealias Value = Binding<Configuration.Value>
 
     private var lastValue: Configuration.Value
     var binding: Value
@@ -11,12 +11,12 @@ final class BindingModifier<Configuration>: DOMElementModifier, Unmountable wher
     var accessor: DOM.PropertyAccessor?
     var isDirty: Bool = false
 
-    public init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
+    init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
         self.lastValue = value.wrappedValue
         self.binding = value
     }
 
-    public func updateValue(_ value: consuming Value, _ context: inout _TransactionContext) {
+    func updateValue(_ value: consuming Value, _ context: inout _TransactionContext) {
         self.binding = value
 
         if !Configuration.equals(binding.wrappedValue, lastValue) {
@@ -45,7 +45,7 @@ final class BindingModifier<Configuration>: DOMElementModifier, Unmountable wher
         isDirty = false
     }
 
-    @_spi(Benchmarking) public func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
         if mountedNode != nil {
             assertionFailure("Binding effect can only be mounted on a single element")
             if let sink = self.sink.take(), let node = self.mountedNode {
@@ -118,7 +118,7 @@ extension BindingConfiguration where Value == Double {
 }
 
 struct TextBindingConfiguration: BindingConfiguration {
-    public typealias Value = String
+    typealias Value = String
     static var propertyName: String { "value" }
     static var eventName: String { "input" }
     static func readValue(_ jsValue: DOM.PropertyValue) -> Value? {
@@ -135,7 +135,7 @@ struct TextBindingConfiguration: BindingConfiguration {
 }
 
 struct NumberBindingConfiguration: BindingConfiguration {
-    public typealias Value = Double?
+    typealias Value = Double?
     static var propertyName: String { "valueAsNumber" }
     static var eventName: String { "input" }
     static func readValue(_ jsValue: DOM.PropertyValue) -> Value? {
@@ -156,7 +156,7 @@ struct NumberBindingConfiguration: BindingConfiguration {
 }
 
 struct CheckboxBindingConfiguration: BindingConfiguration {
-    public typealias Value = Bool
+    typealias Value = Bool
     static var propertyName: String { "checked" }
     static var eventName: String { "change" }
     static func readValue(_ jsValue: DOM.PropertyValue) -> Value? {

@@ -24,34 +24,34 @@ public extension View {
     }
 }
 
-public enum DOMEventHandlers {
-    public enum Click: _DOMEventHandlerConfig {
-        public static var name: String = "click"
-        public typealias Event = MouseEvent
+enum DOMEventHandlers {
+    enum Click: _DOMEventHandlerConfig {
+        static var name: String = "click"
+        typealias Event = MouseEvent
     }
 
-    public enum MouseDown: _DOMEventHandlerConfig {
-        public static var name: String = "mousedown"
-        public typealias Event = MouseEvent
+    enum MouseDown: _DOMEventHandlerConfig {
+        static var name: String = "mousedown"
+        typealias Event = MouseEvent
     }
 
-    public enum MouseMove: _DOMEventHandlerConfig {
-        public static var name: String = "mousemove"
-        public typealias Event = MouseEvent
+    enum MouseMove: _DOMEventHandlerConfig {
+        static var name: String = "mousemove"
+        typealias Event = MouseEvent
     }
 
-    public enum MouseUp: _DOMEventHandlerConfig {
-        public static var name: String = "mouseup"
-        public typealias Event = MouseEvent
+    enum MouseUp: _DOMEventHandlerConfig {
+        static var name: String = "mouseup"
+        typealias Event = MouseEvent
     }
 
-    public enum KeyDown: _DOMEventHandlerConfig {
-        public static var name: String = "keydown"
-        public typealias Event = KeyboardEvent
+    enum KeyDown: _DOMEventHandlerConfig {
+        static var name: String = "keydown"
+        typealias Event = KeyboardEvent
     }
 
-    public enum Input: _DOMEventHandlerConfig {
-        public static var name: String = "input"
-        public typealias Event = InputEvent
+    enum Input: _DOMEventHandlerConfig {
+        static var name: String = "input"
+        typealias Event = InputEvent
     }
 }

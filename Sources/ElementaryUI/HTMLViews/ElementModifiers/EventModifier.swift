@@ -6,23 +6,23 @@ public protocol _DOMEventHandlerConfig: _DOMEventConfig {
     associatedtype Event: _TypedDOMEvent
 }
 
-public final class EventHandlerModifier<Config: _DOMEventHandlerConfig>: DOMElementModifier {
-    public typealias Value = (Config.Event) -> Void
+final class EventHandlerModifier<Config: _DOMEventHandlerConfig>: DOMElementModifier {
+    typealias Value = (Config.Event) -> Void
 
     let upstream: EventHandlerModifier?
 
     private var value: Value
 
-    public init(value: consuming @escaping Value, upstream: borrowing DOMElementModifiers) {
+    init(value: consuming @escaping Value, upstream: borrowing DOMElementModifiers) {
         self.value = value
         self.upstream = upstream[EventHandlerModifier.key]
     }
 
-    public func updateValue(_ value: consuming @escaping Value, _ context: inout _TransactionContext) {
+    func updateValue(_ value: consuming @escaping Value, _ context: inout _TransactionContext) {
         self.value = value
     }
 
-    @_spi(Benchmarking) public func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
         logTrace("mounting event modifier")
         return AnyUnmountable(MountedInstance(node, self, &context))
     }
@@ -59,22 +59,22 @@ extension EventHandlerModifier {
 
 // Keep no-argument handlers separate from EventHandlerModifier so they do not
 // materialize DOM.Event or pull typed-event conversion code into the Wasm binary.
-public final class EventActionModifier<Config: _DOMEventConfig>: DOMElementModifier {
-    public typealias Value = () -> Void
+final class EventActionModifier<Config: _DOMEventConfig>: DOMElementModifier {
+    typealias Value = () -> Void
 
     let upstream: EventActionModifier?
     private var value: Value
 
-    public init(value: consuming @escaping Value, upstream: borrowing DOMElementModifiers) {
+    init(value: consuming @escaping Value, upstream: borrowing DOMElementModifiers) {
         self.value = value
         self.upstream = upstream[EventActionModifier.key]
     }
 
-    public func updateValue(_ value: consuming @escaping Value, _ context: inout _TransactionContext) {
+    func updateValue(_ value: consuming @escaping Value, _ context: inout _TransactionContext) {
         self.value = value
     }
 
-    @_spi(Benchmarking) public func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
         logTrace("mounting event action modifier")
         return AnyUnmountable(MountedInstance(node, self, &context))
     }

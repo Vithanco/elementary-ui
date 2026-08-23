@@ -1,21 +1,22 @@
-// The return type is the concrete DOMEffectView rather than some View<Tag>, so that
-// its conditional conformances pick the namespace: one declaration serves HTML and SVG.
+// The wrapper is named so its conditional conformances pick the namespace; the
+// modifier stays opaque so the concrete modifiers, and their value types, need not
+// be public.
 
 public extension MarkupContent where Self: _Mountable {
     // TODO: embedded - for whatever reason this must be public or the embedded compiler freaks out. investigate why, check if still an issue in 6.3
     consuming func _onEvent<Config: _DOMEventHandlerConfig>(
         _: Config.Type,
         handler: @escaping (Config.Event) -> Void
-    ) -> DOMEffectView<EventHandlerModifier<Config>, Self> {
-        DOMEffectView(value: handler, wrapped: self)
+    ) -> DOMEffectView<some DOMElementModifier, Self> {
+        DOMEffectView<EventHandlerModifier<Config>, Self>(value: handler, wrapped: self)
     }
 
     // TODO: embedded - for whatever reason this must be public or the embedded compiler freaks out. investigate why, check if still an issue in 6.3
     consuming func _onEvent<Config: _DOMEventConfig>(
         _: Config.Type,
         handler: @escaping () -> Void
-    ) -> DOMEffectView<EventActionModifier<Config>, Self> {
-        DOMEffectView(value: handler, wrapped: self)
+    ) -> DOMEffectView<some DOMElementModifier, Self> {
+        DOMEffectView<EventActionModifier<Config>, Self>(value: handler, wrapped: self)
     }
 
     /// Adds a handler for click events with event details.
@@ -36,7 +37,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to click events.
     consuming func onClick(
         _ handler: @escaping (MouseEvent) -> Void
-    ) -> DOMEffectView<EventHandlerModifier<DOMEventHandlers.Click>, Self> {
+    ) -> DOMEffectView<some DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.Click.self, handler: handler)
     }
 
@@ -57,7 +58,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to click events.
     consuming func onClick(
         _ handler: @escaping () -> Void
-    ) -> DOMEffectView<EventActionModifier<DOMEventHandlers.Click>, Self> {
+    ) -> DOMEffectView<some DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.Click.self, handler: handler)
     }
 
@@ -77,7 +78,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to mouse down events.
     consuming func onMouseDown(
         _ handler: @escaping (MouseEvent) -> Void
-    ) -> DOMEffectView<EventHandlerModifier<DOMEventHandlers.MouseDown>, Self> {
+    ) -> DOMEffectView<some DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.MouseDown.self, handler: handler)
     }
 
@@ -96,7 +97,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to mouse move events.
     consuming func onMouseMove(
         _ handler: @escaping (MouseEvent) -> Void
-    ) -> DOMEffectView<EventHandlerModifier<DOMEventHandlers.MouseMove>, Self> {
+    ) -> DOMEffectView<some DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.MouseMove.self, handler: handler)
     }
 
@@ -116,7 +117,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to mouse up events.
     consuming func onMouseUp(
         _ handler: @escaping (MouseEvent) -> Void
-    ) -> DOMEffectView<EventHandlerModifier<DOMEventHandlers.MouseUp>, Self> {
+    ) -> DOMEffectView<some DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.MouseUp.self, handler: handler)
     }
 
@@ -139,7 +140,7 @@ public extension MarkupContent where Self: _Mountable {
     /// - Returns: Content that responds to key down events.
     consuming func onKeyDown(
         _ handler: @escaping (KeyboardEvent) -> Void
-    ) -> DOMEffectView<EventHandlerModifier<DOMEventHandlers.KeyDown>, Self> {
+    ) -> DOMEffectView<some DOMElementModifier, Self> {
         _onEvent(DOMEventHandlers.KeyDown.self, handler: handler)
     }
 }
