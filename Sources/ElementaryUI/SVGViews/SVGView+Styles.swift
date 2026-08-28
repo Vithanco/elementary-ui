@@ -1,6 +1,11 @@
 // See SVGView+DOMEvents.swift for why each namespace declares its own.
 //
 // The deprecated Float overload of offset is not mirrored.
+//
+// rotationEffect and scaleEffect are deliberately absent: on SVG, transform-origin
+// resolves against the viewBox rather than the element, so they need
+// transform-box: fill-box and an explicit origin to behave like their HTML
+// counterparts. offset is unaffected - it translates by absolute pixels.
 
 extension SVGView {
     /// Sets the opacity of the content.
@@ -13,17 +18,6 @@ extension SVGView {
         DOMEffectView<OpacityModifier, Self>(value: CSSOpacity(value: value), wrapped: self)
     }
 
-    /// Rotates the content by the specified angle.
-    ///
-    /// - Parameters:
-    ///   - angle: The angle to rotate by.
-    ///   - anchor: The point around which to rotate. Default is `.center`.
-    /// - Returns: SVG content rotated by the specified angle.
-    ///
-    /// - Note: Changes to rotation are automatically animated when done in an animated transaction.
-    public func rotationEffect(_ angle: Angle, anchor: UnitPoint = .center) -> some SVGView<Self.Tag> {
-        DOMEffectView<TransformModifier, Self>(value: .rotation(CSSTransform.Rotation(angle: angle, anchor: anchor)), wrapped: self)
-    }
 
     /// Offsets the content by the specified horizontal and vertical distances.
     ///
@@ -37,30 +31,7 @@ extension SVGView {
         DOMEffectView<TransformModifier, Self>(value: .translation(CSSTransform.Translation(x: x, y: y)), wrapped: self)
     }
 
-    /// Scales the content uniformly by the specified factor.
-    ///
-    /// - Parameters:
-    ///   - scale: The scale factor to apply uniformly to both axes. 1.0 is the original size.
-    ///   - anchor: The point around which to scale. Default is `.center`.
-    /// - Returns: SVG content scaled by the specified factor.
-    ///
-    /// - Note: Changes to scale are automatically animated when done in an animated transaction.
-    public func scaleEffect(_ scale: Double, anchor: UnitPoint = .center) -> some SVGView<Self.Tag> {
-        DOMEffectView<TransformModifier, Self>(value: .scale(CSSTransform.Scale(x: scale, y: scale, anchor: anchor)), wrapped: self)
-    }
 
-    /// Scales the content by the specified horizontal and vertical factors.
-    ///
-    /// - Parameters:
-    ///   - x: The horizontal scale factor. 1.0 is the original width.
-    ///   - y: The vertical scale factor. 1.0 is the original height.
-    ///   - anchor: The point around which to scale. Default is `.center`.
-    /// - Returns: SVG content scaled by the specified factors.
-    ///
-    /// - Note: Changes to scale are automatically animated when done in an animated transaction.
-    public func scaleEffect(x: Double = 1, y: Double = 1, anchor: UnitPoint = .center) -> some SVGView<Self.Tag> {
-        DOMEffectView<TransformModifier, Self>(value: .scale(CSSTransform.Scale(x: x, y: y, anchor: anchor)), wrapped: self)
-    }
 
     /// Applies a Gaussian blur effect to the content.
     ///

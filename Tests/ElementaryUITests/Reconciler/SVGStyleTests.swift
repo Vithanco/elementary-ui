@@ -52,7 +52,7 @@ struct SVGStyleTests {
             SVG.svg {
                 SVG.rect(.x(0), .y(0), .width(1), .height(1))
                     .opacity(0.25)
-                    .scaleEffect(2)
+                    .offset(x: 3, y: 4)
                     .onClick { _ in }
             }
         }
