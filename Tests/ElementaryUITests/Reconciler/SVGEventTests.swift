@@ -10,32 +10,6 @@ struct SVGEventTests {
         static let name = "action-a"
     }
 
-    // Written once against MarkupContent & _Mountable, so it has to compile for both
-    // namespaces - which the separate HTML and SVG suites only show one at a time.
-    private func withClickHandler<Content: MarkupContent & _Mountable>(
-        _ content: consuming Content
-    ) -> _DOMEffectView<some _DOMElementModifier, Content> {
-        content.onClick { _ in }
-    }
-
-    @Test
-    func oneDeclarationServesBothNamespaces() {
-        let html = TestDOM()
-        html.mount { withClickHandler(button {}) }
-        html.runNextFrame()
-
-        let svg = TestDOM()
-        svg.mount {
-            SVG.svg {
-                withClickHandler(SVG.rect(.x(0), .y(0), .width(1), .height(1)))
-            }
-        }
-        svg.runNextFrame()
-
-        #expect(html.ops.contains(.addListener(node: "<button>", event: "click")))
-        #expect(svg.ops.contains(.addListener(node: "<rect>", event: "click")))
-    }
-
     @Test
     func setsEventListenersOnNestedSVGElements() {
         let dom = TestDOM()

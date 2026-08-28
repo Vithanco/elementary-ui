@@ -23,7 +23,7 @@ public extension View where Tag == HTMLTag.input {
     /// - Parameter value: A binding to a string value.
     /// - Returns: An input view bound to the string value.
     consuming func bindValue(_ value: Binding<String>) -> some View<Tag> {
-        _DOMEffectView<BindingModifier<TextBindingConfiguration>, Self>(value: value, wrapped: self)
+        DOMEffectView<BindingModifier<TextBindingConfiguration>, Self>(value: value, wrapped: self)
     }
 
     /// Binds a number input's value to an optional double binding.
@@ -51,7 +51,7 @@ public extension View where Tag == HTMLTag.input {
     /// - Parameter value: A binding to an optional double value.
     /// - Returns: An input view bound to the number value.
     consuming func bindValue(_ value: Binding<Double?>) -> some View<Tag> {
-        _DOMEffectView<BindingModifier<NumberBindingConfiguration>, Self>(value: value, wrapped: self)
+        DOMEffectView<BindingModifier<NumberBindingConfiguration>, Self>(value: value, wrapped: self)
     }
 
     /// Binds a checkbox input's checked state to a boolean binding.
@@ -76,21 +76,21 @@ public extension View where Tag == HTMLTag.input {
     /// - Parameter value: A binding to a boolean value.
     /// - Returns: An input view bound to the checkbox state.
     consuming func bindChecked(_ value: Binding<Bool>) -> some View<Tag> {
-        _DOMEffectView<BindingModifier<CheckboxBindingConfiguration>, Self>(value: value, wrapped: self)
+        DOMEffectView<BindingModifier<CheckboxBindingConfiguration>, Self>(value: value, wrapped: self)
     }
 }
 
 // Wrapped is not constrained to View - the modifiers this drives attach to
 // namespace-agnostic DOM nodes.
-public struct _DOMEffectView<Effect: _DOMElementModifier, Wrapped: MarkupContent & _Mountable> {
-    public typealias Body = Never
-    public typealias Tag = Wrapped.Tag
+struct DOMEffectView<Effect: DOMElementModifier, Wrapped: MarkupContent & _Mountable> {
+    typealias Body = Never
+    typealias Tag = Wrapped.Tag
     var value: Effect.Value
     var wrapped: Wrapped
 
-    public typealias _MountedNode = _StatefulNode<Effect, Wrapped._MountedNode>
+    typealias _MountedNode = _StatefulNode<Effect, Wrapped._MountedNode>
 
-    public static func _makeNode(
+    static func _makeNode(
         _ view: consuming Self,
         context: borrowing _ViewContext,
         ctx: inout _MountContext
@@ -103,7 +103,7 @@ public struct _DOMEffectView<Effect: _DOMElementModifier, Wrapped: MarkupContent
         return .init(state: effect, child: Wrapped._makeNode(view.wrapped, context: context, ctx: &ctx))
     }
 
-    public static func _patchNode(
+    static func _patchNode(
         _ view: consuming Self,
         node: inout _MountedNode,
         tx: inout _TransactionContext
@@ -115,7 +115,7 @@ public struct _DOMEffectView<Effect: _DOMElementModifier, Wrapped: MarkupContent
 
 // MarkupContent cannot be conditional here - HTML and SVGContent both inherit it,
 // and a type may conform to a protocol only once.
-extension _DOMEffectView: _Mountable {}
-extension _DOMEffectView: MarkupContent {}
-extension _DOMEffectView: HTML, View where Wrapped: View {}
-extension _DOMEffectView: SVGContent, SVGView where Wrapped: SVGView {}
+extension DOMEffectView: _Mountable {}
+extension DOMEffectView: MarkupContent {}
+extension DOMEffectView: HTML, View where Wrapped: View {}
+extension DOMEffectView: SVGContent, SVGView where Wrapped: SVGView {}

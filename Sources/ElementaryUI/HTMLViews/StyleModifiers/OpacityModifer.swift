@@ -1,4 +1,4 @@
-final class OpacityModifier: _DOMElementModifier {
+final class OpacityModifier: DOMElementModifier {
     typealias Value = CSSOpacity
 
     let upstream: OpacityModifier?
@@ -6,7 +6,7 @@ final class OpacityModifier: _DOMElementModifier {
 
     var value: CSSValueSource<CSSOpacity>
 
-    init(value: consuming Value, upstream: borrowing _DOMElementModifiers) {
+    init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
         self.value = CSSValueSource(value: value)
         self.upstream = upstream[OpacityModifier.key]
         self.layerNumber = (self.upstream?.layerNumber ?? 0) + 1
@@ -16,8 +16,8 @@ final class OpacityModifier: _DOMElementModifier {
         self.value.updateValue(value, &context)
     }
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> _AnyUnmountable {
-        _AnyUnmountable(MountedStyleModifier(node, makeLayers(&context), &context))
+    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+        AnyUnmountable(MountedStyleModifier(node, makeLayers(&context), &context))
     }
 
     private func makeLayers(_ context: inout _MountContext) -> [CSSValueSource<CSSOpacity>.Instance] {

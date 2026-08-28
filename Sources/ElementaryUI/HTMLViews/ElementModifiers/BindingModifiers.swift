@@ -1,6 +1,6 @@
 import _UTF8Internals
 
-final class BindingModifier<Configuration>: _DOMElementModifier, Unmountable where Configuration: BindingConfiguration {
+final class BindingModifier<Configuration>: DOMElementModifier, Unmountable where Configuration: BindingConfiguration {
     typealias Value = Binding<Configuration.Value>
 
     private var lastValue: Configuration.Value
@@ -11,7 +11,7 @@ final class BindingModifier<Configuration>: _DOMElementModifier, Unmountable whe
     var accessor: DOM.PropertyAccessor?
     var isDirty: Bool = false
 
-    init(value: consuming Value, upstream: borrowing _DOMElementModifiers) {
+    init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
         self.lastValue = value.wrappedValue
         self.binding = value
     }
@@ -45,7 +45,7 @@ final class BindingModifier<Configuration>: _DOMElementModifier, Unmountable whe
         isDirty = false
     }
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> _AnyUnmountable {
+    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
         if mountedNode != nil {
             assertionFailure("Binding effect can only be mounted on a single element")
             if let sink = self.sink.take(), let node = self.mountedNode {
@@ -79,7 +79,7 @@ final class BindingModifier<Configuration>: _DOMElementModifier, Unmountable whe
         // attributes are set before we do so - value properties in the DOM depend on attributes
         context.scheduler.addCommitAction(updateDOMNode)
 
-        return _AnyUnmountable(self)
+        return AnyUnmountable(self)
     }
 
     func unmount(_ context: inout _CommitContext) {

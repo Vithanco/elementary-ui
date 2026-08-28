@@ -1,8 +1,8 @@
-final class FocusModifier<FocusValue: Hashable>: _DOMElementModifier, Unmountable {
+final class FocusModifier<FocusValue: Hashable>: DOMElementModifier, Unmountable {
     private var binding: Binding
     private var focusAccessor: DOM.FocusAccessor?
 
-    init(value: consuming Binding, upstream: borrowing _DOMElementModifiers) {
+    init(value: consuming Binding, upstream: borrowing DOMElementModifiers) {
         self.binding = value
     }
 
@@ -15,7 +15,7 @@ final class FocusModifier<FocusValue: Hashable>: _DOMElementModifier, Unmountabl
         self.binding = value
     }
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> _AnyUnmountable {
+    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
         if focusAccessor != nil {
             assertionFailure("FocusModifier can only be mounted on a single element")
             logWarning("FocusModifier can only be mounted on a single element")
@@ -33,7 +33,7 @@ final class FocusModifier<FocusValue: Hashable>: _DOMElementModifier, Unmountabl
             }
         }
 
-        return _AnyUnmountable(self)
+        return AnyUnmountable(self)
     }
 
     func unmount(_ context: inout _CommitContext) {

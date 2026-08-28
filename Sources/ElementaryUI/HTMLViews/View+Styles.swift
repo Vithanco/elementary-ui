@@ -1,7 +1,7 @@
-extension MarkupContent where Self: _Mountable {
-    /// Sets the opacity of the content.
+extension View {
+    /// Sets the opacity of the view.
     ///
-    /// Use this modifier to control the transparency of content and everything inside it.
+    /// Use this modifier to control the transparency of a view and its content.
     /// Opacity values range from 0 (fully transparent) to 1 (fully opaque).
     ///
     /// ## Usage
@@ -19,16 +19,16 @@ extension MarkupContent where Self: _Mountable {
     /// ```
     ///
     /// - Parameter value: The opacity value, from 0 (invisible) to 1 (fully visible).
-    /// - Returns: Content with the specified opacity.
+    /// - Returns: A view with the specified opacity.
     ///
     /// - Note: Changes to opacity are automatically animated when done in an animated transaction.
-    public func opacity(_ value: Double) -> _DOMEffectView<some _DOMElementModifier, Self> {
-        _DOMEffectView<OpacityModifier, Self>(value: CSSOpacity(value: value), wrapped: self)
+    public func opacity(_ value: Double) -> some View<Self.Tag> {
+        DOMEffectView<OpacityModifier, Self>(value: CSSOpacity(value: value), wrapped: self)
     }
 
-    /// Rotates the content by the specified angle.
+    /// Rotates the view by the specified angle.
     ///
-    /// Use this modifier to apply a 2D rotation transform to content.
+    /// Use this modifier to apply a 2D rotation transform to a view.
     ///
     /// ## Usage
     ///
@@ -49,16 +49,16 @@ extension MarkupContent where Self: _Mountable {
     /// - Parameters:
     ///   - angle: The angle to rotate by.
     ///   - anchor: The point around which to rotate. Default is `.center`.
-    /// - Returns: Content rotated by the specified angle.
+    /// - Returns: A view rotated by the specified angle.
     ///
     /// - Note: Changes to rotation are automatically animated when done in an animated transaction.
-    public func rotationEffect(_ angle: Angle, anchor: UnitPoint = .center) -> _DOMEffectView<some _DOMElementModifier, Self> {
-        _DOMEffectView<TransformModifier, Self>(value: .rotation(CSSTransform.Rotation(angle: angle, anchor: anchor)), wrapped: self)
+    public func rotationEffect(_ angle: Angle, anchor: UnitPoint = .center) -> some View<Self.Tag> {
+        DOMEffectView<TransformModifier, Self>(value: .rotation(CSSTransform.Rotation(angle: angle, anchor: anchor)), wrapped: self)
     }
 
-    /// Offsets the content by the specified horizontal and vertical distances.
+    /// Offsets the view by the specified horizontal and vertical distances.
     ///
-    /// Use this modifier to move content from its natural position without
+    /// Use this modifier to move a view from its natural position without
     /// affecting the layout of other views.
     ///
     /// ## Usage
@@ -78,22 +78,22 @@ extension MarkupContent where Self: _Mountable {
     /// - Parameters:
     ///   - x: The horizontal offset in pixels. Default is 0.
     ///   - y: The vertical offset in pixels. Default is 0.
-    /// - Returns: Content offset by the specified amounts.
+    /// - Returns: A view offset by the specified amounts.
     ///
     /// - Note: Changes to offset are automatically animated when done in an animated transaction.
-    public func offset(x: Double = 0, y: Double = 0) -> _DOMEffectView<some _DOMElementModifier, Self> {
-        _DOMEffectView<TransformModifier, Self>(value: .translation(CSSTransform.Translation(x: x, y: y)), wrapped: self)
+    public func offset(x: Double = 0, y: Double = 0) -> some View<Self.Tag> {
+        DOMEffectView<TransformModifier, Self>(value: .translation(CSSTransform.Translation(x: x, y: y)), wrapped: self)
     }
 
     @available(*, deprecated, message: "Use offset(x: Double, y: Double) instead")
     @_disfavoredOverload
-    public func offset(x: Float = 0, y: Float = 0) -> _DOMEffectView<some _DOMElementModifier, Self> {
-        _DOMEffectView<TransformModifier, Self>(value: .translation(CSSTransform.Translation(x: Double(x), y: Double(y))), wrapped: self)
+    public func offset(x: Float = 0, y: Float = 0) -> some View<Self.Tag> {
+        DOMEffectView<TransformModifier, Self>(value: .translation(CSSTransform.Translation(x: Double(x), y: Double(y))), wrapped: self)
     }
 
-    /// Scales the content uniformly by the specified factor.
+    /// Scales the view uniformly by the specified factor.
     ///
-    /// Use this modifier to uniformly scale content along both axes.
+    /// Use this modifier to uniformly scale a view along both axes.
     ///
     /// ## Usage
     ///
@@ -114,16 +114,16 @@ extension MarkupContent where Self: _Mountable {
     /// - Parameters:
     ///   - scale: The scale factor to apply uniformly to both axes. 1.0 is the original size.
     ///   - anchor: The point around which to scale. Default is `.center`.
-    /// - Returns: Content scaled by the specified factor.
+    /// - Returns: A view scaled by the specified factor.
     ///
     /// - Note: Changes to scale are automatically animated when done in an animated transaction.
-    public func scaleEffect(_ scale: Double, anchor: UnitPoint = .center) -> _DOMEffectView<some _DOMElementModifier, Self> {
-        _DOMEffectView<TransformModifier, Self>(value: .scale(CSSTransform.Scale(x: scale, y: scale, anchor: anchor)), wrapped: self)
+    public func scaleEffect(_ scale: Double, anchor: UnitPoint = .center) -> some View<Self.Tag> {
+        DOMEffectView<TransformModifier, Self>(value: .scale(CSSTransform.Scale(x: scale, y: scale, anchor: anchor)), wrapped: self)
     }
 
-    /// Scales the content by the specified horizontal and vertical factors.
+    /// Scales the view by the specified horizontal and vertical factors.
     ///
-    /// Use this modifier to scale content independently along each axis.
+    /// Use this modifier to scale a view independently along each axis.
     ///
     /// ## Usage
     ///
@@ -146,16 +146,16 @@ extension MarkupContent where Self: _Mountable {
     ///   - x: The horizontal scale factor. 1.0 is the original width.
     ///   - y: The vertical scale factor. 1.0 is the original height.
     ///   - anchor: The point around which to scale. Default is `.center`.
-    /// - Returns: Content scaled by the specified factors.
+    /// - Returns: A view scaled by the specified factors.
     ///
     /// - Note: Changes to scale are automatically animated when done in an animated transaction.
-    public func scaleEffect(x: Double = 1, y: Double = 1, anchor: UnitPoint = .center) -> _DOMEffectView<some _DOMElementModifier, Self> {
-        _DOMEffectView<TransformModifier, Self>(value: .scale(CSSTransform.Scale(x: x, y: y, anchor: anchor)), wrapped: self)
+    public func scaleEffect(x: Double = 1, y: Double = 1, anchor: UnitPoint = .center) -> some View<Self.Tag> {
+        DOMEffectView<TransformModifier, Self>(value: .scale(CSSTransform.Scale(x: x, y: y, anchor: anchor)), wrapped: self)
     }
 
-    /// Applies a Gaussian blur effect to the content.
+    /// Applies a Gaussian blur effect to the view.
     ///
-    /// Use this modifier to blur content.
+    /// Use this modifier to blur the content of a view.
     ///
     /// ## Usage
     ///
@@ -172,16 +172,16 @@ extension MarkupContent where Self: _Mountable {
     /// ```
     ///
     /// - Parameter radius: The blur radius in pixels. Use 0 for no blur.
-    /// - Returns: Content with the specified blur effect.
+    /// - Returns: A view with the specified blur effect.
     ///
     /// - Note: Changes to blur are automatically animated when done in an animated transaction.
-    public func blur(radius: Double) -> _DOMEffectView<some _DOMElementModifier, Self> {
-        _DOMEffectView<FilterModifier, Self>(value: .blur(CSSFilter.Blur(radius: radius)), wrapped: self)
+    public func blur(radius: Double) -> some View<Self.Tag> {
+        DOMEffectView<FilterModifier, Self>(value: .blur(CSSFilter.Blur(radius: radius)), wrapped: self)
     }
 
-    /// Adjusts the color saturation of the content.
+    /// Adjusts the color saturation of the view.
     ///
-    /// Use this modifier to control the color intensity of content.
+    /// Use this modifier to control the color intensity of a view.
     ///
     /// ## Usage
     ///
@@ -198,16 +198,16 @@ extension MarkupContent where Self: _Mountable {
     /// ```
     ///
     /// - Parameter amount: The saturation multiplier. 1.0 is normal, 0.0 is grayscale, >1.0 is oversaturated.
-    /// - Returns: Content with adjusted saturation.
+    /// - Returns: A view with adjusted saturation.
     ///
     /// - Note: Changes to saturation are automatically animated when done in an animated transaction.
-    public func saturation(_ amount: Double) -> _DOMEffectView<some _DOMElementModifier, Self> {
-        _DOMEffectView<FilterModifier, Self>(value: .saturation(CSSFilter.Saturation(amount: amount)), wrapped: self)
+    public func saturation(_ amount: Double) -> some View<Self.Tag> {
+        DOMEffectView<FilterModifier, Self>(value: .saturation(CSSFilter.Saturation(amount: amount)), wrapped: self)
     }
 
-    /// Adjusts the brightness of the content.
+    /// Adjusts the brightness of the view.
     ///
-    /// Use this modifier to make content brighter or darker.
+    /// Use this modifier to make a view brighter or darker.
     ///
     /// ## Usage
     ///
@@ -224,10 +224,10 @@ extension MarkupContent where Self: _Mountable {
     /// ```
     ///
     /// - Parameter amount: The brightness multiplier. 1.0 is normal, 0.0 is black, >1.0 is brighter.
-    /// - Returns: Content with adjusted brightness.
+    /// - Returns: A view with adjusted brightness.
     ///
     /// - Note: Changes to brightness are automatically animated when done in an animated transaction.
-    public func brightness(_ amount: Double) -> _DOMEffectView<some _DOMElementModifier, Self> {
-        _DOMEffectView<FilterModifier, Self>(value: .brightness(CSSFilter.Brightness(amount: amount)), wrapped: self)
+    public func brightness(_ amount: Double) -> some View<Self.Tag> {
+        DOMEffectView<FilterModifier, Self>(value: .brightness(CSSFilter.Brightness(amount: amount)), wrapped: self)
     }
 }

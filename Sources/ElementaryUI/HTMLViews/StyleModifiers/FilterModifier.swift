@@ -1,4 +1,4 @@
-final class FilterModifier: _DOMElementModifier {
+final class FilterModifier: DOMElementModifier {
     typealias Value = CSSFilter.AnyFunction
 
     let upstream: FilterModifier?
@@ -6,7 +6,7 @@ final class FilterModifier: _DOMElementModifier {
 
     var value: CSSFilter.AnyFunction.ValueSource
 
-    init(value: consuming Value, upstream: borrowing _DOMElementModifiers) {
+    init(value: consuming Value, upstream: borrowing DOMElementModifiers) {
         self.value = value.makeSource()
         self.upstream = upstream[FilterModifier.key]
         self.layerNumber = (self.upstream?.layerNumber ?? 0) + 1
@@ -25,8 +25,8 @@ final class FilterModifier: _DOMElementModifier {
         }
     }
 
-    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> _AnyUnmountable {
-        _AnyUnmountable(MountedStyleModifier(node, makeLayers(&context), &context))
+    func mount(_ node: DOM.Node, _ context: inout _MountContext) -> AnyUnmountable {
+        AnyUnmountable(MountedStyleModifier(node, makeLayers(&context), &context))
     }
 
     private func makeLayers(_ context: inout _MountContext) -> [AnyCSSAnimatedValueInstance<CSSFilter>] {
