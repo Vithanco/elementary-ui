@@ -1,5 +1,7 @@
-// Mirrored per namespace like key(_:) in KeyedView.swift: some View<Tag> and
-// some SVGView<Tag> are different opaque types, so one extension cannot serve both.
+// Mirrored per namespace like key(_:) in KeyedView.swift. A single extension on
+// MarkupContent & _Mountable does work, but only by returning the concrete wrapper
+// instead of some View<Tag> / some SVGView<Tag>, which means making it and its
+// modifier protocol public. The duplication is the cheaper trade.
 //
 // onInput is deliberately absent - input events do not fire on SVG elements.
 

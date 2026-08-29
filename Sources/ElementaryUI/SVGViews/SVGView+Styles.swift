@@ -2,10 +2,9 @@
 //
 // The deprecated Float overload of offset is not mirrored.
 //
-// rotationEffect and scaleEffect are deliberately absent: on SVG, transform-origin
-// resolves against the viewBox rather than the element, so they need
-// transform-box: fill-box and an explicit origin to behave like their HTML
-// counterparts. offset is unaffected - it translates by absolute pixels.
+// rotationEffect and scaleEffect are deliberately absent: on SVG transform-origin
+// resolves against the viewBox, not the element, so they need transform-box: fill-box
+// and an explicit origin. offset is unaffected - it translates by absolute pixels.
 
 extension SVGView {
     /// Sets the opacity of the content.
