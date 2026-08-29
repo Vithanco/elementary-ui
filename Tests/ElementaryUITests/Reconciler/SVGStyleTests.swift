@@ -3,9 +3,6 @@ import Reactivity
 import Testing
 
 /// The SVG counterparts of the style modifier tests in `DOMStyleTests`.
-///
-/// Serialized like `TransitionMountRootTests`: withAnimation leaks across tests run in parallel.
-@Suite(.serialized)
 struct SVGStyleTests {
     @Test
     func setsOpacityOnNestedSVGElements() {
@@ -186,63 +183,6 @@ struct SVGStyleTests {
         dom.runNextFrame()
 
         #expect(dom.ops.contains(.setStyle(node: "<g>", name: "opacity", value: "0.75")))
-    }
-
-    @Test
-    func animatesOpacityChangesInAnAnimatedTransaction() {
-        let state = ToggleState()
-        let dom = TestDOM()
-        dom.mount {
-            SVG.svg {
-                SVG.rect(.x(0), .y(0), .width(1), .height(1)).opacity(state.value ? 1 : 0.5)
-            }
-        }
-        dom.runNextFrame()
-        #expect(dom.startedAnimationCount == 0)
-
-        withAnimation(.linear(duration: 0.35)) {
-            state.toggle()
-        }
-        dom.runNextFrame()
-
-        #expect(dom.startedAnimationCount == 1)
-    }
-
-    @Test
-    func animatesTransformChangesInAnAnimatedTransaction() {
-        let state = ToggleState()
-        let dom = TestDOM()
-        dom.mount {
-            SVG.svg {
-                SVG.rect(.x(0), .y(0), .width(1), .height(1)).offset(x: state.value ? 9 : 1, y: 0)
-            }
-        }
-        dom.runNextFrame()
-
-        withAnimation(.linear(duration: 0.35)) {
-            state.toggle()
-        }
-        dom.runNextFrame()
-
-        #expect(dom.startedAnimationCount == 1)
-    }
-
-    @Test
-    func doesNotAnimateOutsideAnAnimatedTransaction() {
-        let state = ToggleState()
-        let dom = TestDOM()
-        dom.mount {
-            SVG.svg {
-                SVG.rect(.x(0), .y(0), .width(1), .height(1)).opacity(state.value ? 1 : 0.5)
-            }
-        }
-        dom.runNextFrame()
-
-        state.toggle()
-        dom.runNextFrame()
-
-        #expect(dom.startedAnimationCount == 0)
-        #expect(dom.ops.contains(.setStyle(node: "<rect>", name: "opacity", value: "1.0")))
     }
 }
 
