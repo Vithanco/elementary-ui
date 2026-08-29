@@ -1,7 +1,6 @@
-// Mirrored per namespace like key(_:) in KeyedView.swift. A single extension on
-// MarkupContent & _Mountable does work, but only by returning the concrete wrapper
-// instead of some View<Tag> / some SVGView<Tag>, which means making it and its
-// modifier protocol public. The duplication is the cheaper trade.
+// Mirrored per namespace like key(_:) in KeyedView.swift. One extension on
+// MarkupContent & _Mountable would serve both, but only by making the wrapper and
+// its modifier protocol public.
 //
 // onInput is deliberately absent - input events do not fire on SVG elements.
 
