@@ -115,6 +115,56 @@ struct SVGEventTests {
         let listeners = dom.ops.filter { if case .addListener(_, "click") = $0 { true } else { false } }
         #expect(listeners.count == 2)
     }
+
+    @Test
+    func patchingThroughTheModifierUpdatesTheWrappedElement() {
+        let state = ToggleState()
+        let ops = patchOps {
+            SVG.svg {
+                SVG.rect(.x(state.value ? 5 : 0), .y(0), .width(1), .height(1))
+                    .onClick { _ in }
+            }
+        } toggle: {
+            state.toggle()
+        }
+
+        #expect(ops == [.setAttr(node: "<rect>", name: "x", value: "5")])
+    }
+
+    @Test
+    func growingARecursiveSVGViewAddsListenersForTheNewElements() {
+        let state = ToggleState()
+        let ops = patchOps {
+            SVG.svg {
+                ShapeTreeView(
+                    node: state.value
+                        ? .group([.box(x: 0), .box(x: 1)])
+                        : .group([.box(x: 0)])
+                )
+            }
+        } toggle: {
+            state.toggle()
+        }
+
+        let added = ops.filter { if case .addListener(_, "click") = $0 { true } else { false } }
+        #expect(added.count == 1)
+    }
+
+    @Test
+    func unmountingRemovesTheModifiedSVGElement() {
+        let state = ToggleState()
+        let ops = patchOps {
+            SVG.svg {
+                if !state.value {
+                    SVG.rect(.x(0), .y(0), .width(1), .height(1)).onClick { _ in }
+                }
+            }
+        } toggle: {
+            state.toggle()
+        }
+
+        #expect(ops.contains(.removeChild(parent: "<svg>", child: "<rect>")))
+    }
 }
 
 private indirect enum ShapeTree: Sendable {
@@ -137,5 +187,14 @@ private struct ShapeTreeView: SVGView {
         case let .box(x):
             SVG.rect(.x(.init(x)), .y(0), .width(1), .height(1)).onClick { _ in }
         }
+    }
+}
+
+@Reactive
+private class ToggleState {
+    var value = false
+
+    func toggle() {
+        value.toggle()
     }
 }
