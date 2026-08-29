@@ -8,12 +8,16 @@
 // to. `transform: rotate(45deg)` is a valid string in both namespaces and means two
 // different things, so only a real engine can tell us whether a modifier is correct.
 //
+// Runs against Chromium, Firefox and WebKit: the behaviour under test is a CSS
+// Transforms/SVG interaction, which is the corner where engines have historically
+// disagreed, so one green engine proves nothing about the others.
+//
 // Usage: node scripts/run-browser-tests.mjs
 
 import { spawn, spawnSync } from "node:child_process";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
-import puppeteer from "puppeteer";
+import { chromium, firefox, webkit } from "playwright";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(__dirname, "..");
@@ -101,12 +105,12 @@ async function measure(page) {
   }, expectations.map((e) => e.id));
 }
 
-function compare(actual) {
+function compare(engineName, actual) {
   const failures = [];
   const fmt = (n) => n.toFixed(2).padStart(7);
 
   console.error("");
-  console.error("  SVG transform geometry");
+  console.error(`  SVG transform geometry - ${engineName}`);
   console.error("");
   console.error(`  ${"case".padEnd(18)} ${"centre".padStart(17)} ${"size".padStart(17)}`);
   console.error(`  ${"─".repeat(18)} ${"─".repeat(17)} ${"─".repeat(17)}`);
@@ -114,7 +118,7 @@ function compare(actual) {
   for (const e of expectations) {
     const a = actual[e.id];
     if (!a) {
-      failures.push(`${e.id}: element not found in the rendered page`);
+      failures.push(`${engineName}/${e.id}: element not found in the rendered page`);
       continue;
     }
     const off = ["cx", "cy", "w", "h"].filter((k) => Math.abs(a[k] - e[k]) > TOLERANCE);
@@ -126,7 +130,7 @@ function compare(actual) {
       console.error(
         `  ${"".padEnd(18)} expected (${fmt(e.cx)},${fmt(e.cy)}) ${fmt(e.w)}x${fmt(e.h)}`,
       );
-      failures.push(`${e.id}: ${off.join(", ")} outside ${TOLERANCE}px of expected`);
+      failures.push(`${engineName}/${e.id}: ${off.join(", ")} outside ${TOLERANCE}px of expected`);
     }
   }
   console.error("");
@@ -138,17 +142,25 @@ console.error("Starting preview server...");
 const previewProc = await startPreview();
 console.error(`Preview server running on ${PREVIEW_URL}`);
 
+const engines = [
+  ["chromium", chromium],
+  ["firefox", firefox],
+  ["webkit", webkit],
+];
+
 let failures = [];
 try {
-  const browser = await puppeteer.launch({ headless: true, args: ["--no-sandbox"] });
-  try {
-    const page = await browser.newPage();
-    await page.goto(PREVIEW_URL, { waitUntil: "networkidle0" });
-    await page.waitForSelector("#app[data-ready='true']", { timeout: 30_000 });
-    await page.waitForSelector("#canvas", { timeout: 30_000 });
-    failures = compare(await measure(page));
-  } finally {
-    await browser.close();
+  for (const [name, engine] of engines) {
+    const browser = await engine.launch();
+    try {
+      const page = await browser.newPage();
+      await page.goto(PREVIEW_URL, { waitUntil: "networkidle" });
+      await page.waitForSelector("#app[data-ready='true']", { timeout: 30_000 });
+      await page.waitForSelector("#canvas", { timeout: 30_000 });
+      failures = failures.concat(compare(name, await measure(page)));
+    } finally {
+      await browser.close();
+    }
   }
 } finally {
   previewProc.kill();
@@ -160,4 +172,4 @@ if (failures.length > 0) {
   process.exit(1);
 }
 
-console.error("All geometry matches.");
+console.error(`All geometry matches on ${engines.map(([n]) => n).join(", ")}.`);

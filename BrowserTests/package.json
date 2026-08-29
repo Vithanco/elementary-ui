@@ -11,7 +11,7 @@
   "devDependencies": {
     "@elementary-swift/vite-plugin-swift-wasm": "~0.2.0",
     "@types/node": "^25.9.5",
-    "puppeteer": "^24.43.1",
+    "playwright": "^1.58.0",
     "vite": "^8.2.2"
   }
 }

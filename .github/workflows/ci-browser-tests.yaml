@@ -60,9 +60,9 @@ jobs:
         working-directory: BrowserTests
         run: pnpm preinstall && pnpm install
 
-      - name: Install Puppeteer Chrome
+      - name: Install Playwright browsers
         working-directory: BrowserTests
-        run: npx puppeteer browsers install chrome
+        run: npx playwright install --with-deps chromium firefox webkit
 
       - name: Run browser tests
         working-directory: BrowserTests
