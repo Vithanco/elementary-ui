@@ -11,7 +11,6 @@ extension SVGView {
         DOMEffectView<OpacityModifier, Self>(value: CSSOpacity(value: value), wrapped: self)
     }
 
-
     /// Offsets the content by the specified horizontal and vertical distances.
     ///
     /// - Parameters:
@@ -23,8 +22,6 @@ extension SVGView {
     public func offset(x: Double = 0, y: Double = 0) -> some SVGView<Self.Tag> {
         DOMEffectView<TransformModifier, Self>(value: .translation(CSSTransform.Translation(x: x, y: y)), wrapped: self)
     }
-
-
 
     /// Applies a Gaussian blur effect to the content.
     ///
