@@ -1,5 +1,5 @@
 public extension View {
-    // TODO: embedded - for whatever reason this must be public or the embedded compiler freaks out. investigate why, check if still an issue in 6.3
+    // TODO: embedded - must be public; internal trips embedded metatype restrictions in _FunctionNode. Confirmed still needed on 6.3.3, recheck on 7.0.
     consuming func _onEvent<Config: _DOMEventHandlerConfig>(
         _ type: Config.Type,
         handler: @escaping (Config.Event) -> Void
@@ -7,7 +7,7 @@ public extension View {
         DOMEffectView<EventHandlerModifier<Config>, Self>(value: handler, wrapped: self)
     }
 
-    // TODO: embedded - for whatever reason this must be public or the embedded compiler freaks out. investigate why, check if still an issue in 6.3
+    // TODO: embedded - must be public; internal trips embedded metatype restrictions in _FunctionNode. Confirmed still needed on 6.3.3, recheck on 7.0.
     consuming func _onEvent<Config: _DOMEventConfig>(
         _ type: Config.Type,
         handler: @escaping () -> Void

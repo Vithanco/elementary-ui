@@ -80,7 +80,7 @@ public extension View where Tag == HTMLTag.input {
     }
 }
 
-struct DOMEffectView<Effect: DOMElementModifier, Wrapped: View>: View {
+struct DOMEffectView<Effect: DOMElementModifier, Wrapped: MarkupContent & _Mountable> {
     typealias Body = Never
     typealias Tag = Wrapped.Tag
     var value: Effect.Value
@@ -110,3 +110,10 @@ struct DOMEffectView<Effect: DOMElementModifier, Wrapped: View>: View {
         Wrapped._patchNode(view.wrapped, node: &node.child, tx: &tx)
     }
 }
+
+// MarkupContent must be unconditional: HTML and SVGContent both inherit it, and a
+// type conforms to a protocol only once.
+extension DOMEffectView: _Mountable {}
+extension DOMEffectView: MarkupContent {}
+extension DOMEffectView: HTML, View where Wrapped: View {}
+extension DOMEffectView: SVGContent, SVGView where Wrapped: SVGView {}
