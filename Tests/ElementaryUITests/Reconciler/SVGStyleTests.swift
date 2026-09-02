@@ -184,6 +184,48 @@ struct SVGStyleTests {
 
         #expect(dom.ops.contains(.setStyle(node: "<g>", name: "opacity", value: "0.75")))
     }
+
+    @Test
+    func rotationFixesTheTransformBoxAndOrigin() {
+        let dom = TestDOM()
+        dom.mount {
+            SVG.svg {
+                SVG.rect(.x(0), .y(0), .width(1), .height(1)).rotationEffect(.degrees(45))
+            }
+        }
+        dom.runNextFrame()
+
+        #expect(dom.ops.contains(.setStyle(node: "<rect>", name: "transform-box", value: "fill-box")))
+        #expect(dom.ops.contains(.setStyle(node: "<rect>", name: "transform-origin", value: "50% 50%")))
+        #expect(dom.ops.contains(.setStyle(node: "<rect>", name: "transform", value: "rotate(45.0deg)")))
+    }
+
+    @Test
+    func scalingFixesTheTransformBoxAndOrigin() {
+        let dom = TestDOM()
+        dom.mount {
+            SVG.svg {
+                SVG.rect(.x(0), .y(0), .width(1), .height(1)).scaleEffect(2)
+            }
+        }
+        dom.runNextFrame()
+
+        #expect(dom.ops.contains(.setStyle(node: "<rect>", name: "transform-box", value: "fill-box")))
+        #expect(dom.ops.contains(.setStyle(node: "<rect>", name: "transform-origin", value: "50% 50%")))
+    }
+
+    @Test
+    func offsetDoesNotTouchTheTransformBox() {
+        let dom = TestDOM()
+        dom.mount {
+            SVG.svg {
+                SVG.rect(.x(0), .y(0), .width(1), .height(1)).offset(x: 1, y: 2)
+            }
+        }
+        dom.runNextFrame()
+
+        #expect(!dom.ops.contains { if case .setStyle(_, "transform-box", _) = $0 { true } else { false } })
+    }
 }
 
 @Reactive
